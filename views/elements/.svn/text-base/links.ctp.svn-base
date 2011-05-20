@@ -1,0 +1,140 @@
+﻿<?php
+
+//Cache::config(null, array('engine'=>'File', 'path'=>CACHE));
+Cache::set(array('duration' => '+1 year'));
+$ltypes = Cache::read('types');
+//var_dump($_SESSION['Lang']);
+if(!isset($_SESSION['Lang']))
+{
+	$_SESSION['Lang'] = 1;
+}
+$types = array();
+foreach($ltypes as $langType)
+{
+	if($langType['Type']['category_id']==$_SESSION['Lang'])
+	{
+	array_push($types,$langType);
+	}
+}
+
+ function strToTrUpper($value)
+ {
+ $value = str_replace("ç", "Ç", $value);
+ $value = str_replace("ğ", "Ğ", $value);
+ $value = str_replace("ı", "I", $value);
+ $value = str_replace("i", "İ", $value);
+ $value = str_replace("ö", "Ö", $value);
+ $value = str_replace("ü", "Ü", $value);
+ $value = str_replace("ş", "Ş", $value);
+ 
+ $value = mb_strtoupper($value);
+ $value = trim($value);
+ 
+ return $value;
+ }
+ 
+  function strToTrLower($value)
+ {
+ $value = str_replace("Ç", "ç", $value);
+ $value = str_replace("Ğ", "ğ", $value);
+ $value = str_replace("I", "ı", $value);
+ $value = str_replace("İ", "i", $value);
+ $value = str_replace("Ö", "ö", $value);
+ $value = str_replace("Ü", "ü", $value);
+ $value = str_replace("Ş", "ş", $value);
+ 
+ $value = strtolower($value);
+ $value = trim($value);
+ 
+ return $value;
+ }
+ 
+ function uCaseWords($value)
+ 
+{
+$value = $this->strToTrLower($value);
+ 
+$value = split(" ", trim($value));
+ 
+ $value_tr = "";
+ 
+ for($x=0; $x < count($value); $x++)
+ {
+ $value_first = substr($value[$x], 0, 1);
+ $value_last = substr($value[$x], 1);
+ $value_first = $this->strToTrUpper($value_first);
+ 
+ $value_tr .= $value_first . $value_last ." ";
+ }
+ 
+ $value_tr = trim($value_tr);
+ 
+ return $value_tr;
+ }
+
+function icgoster($marray,$in,$html,$authake)
+{
+	if ($in==0)
+	{
+		echo "<ul class=\"sf-menu sf-normal sf-wttex\">";
+	}
+	else 
+	{
+		echo "<ul>";
+	}
+	foreach ($marray as $array)
+	{
+				if($array['Type']['category_id']==$_SESSION['Lang'])
+			{
+		if ($array['Type']['title'] )//&& ($array['Type']['category_id']==$_SESSION['Lang']))
+		{
+			if (!$array['Type']['link'])
+			{
+			if(!$authake->isMemberOf(1))
+			{
+			if (!$array['children'])
+				{
+					echo '<li>'.$html->link(__(strToTrUpper($array['Type']['title']), true),'#',array('onclick' => 'takeContent('.$array['Type']['id'].')'));// array('plugin'=>'module','controller'=>'types','action' => 'show', $array['Type']['id']));
+					//echo '<li>'.$html->link(__(strToTrUpper($array['Type']['title']), true), array('plugin'=>'module','controller'=>'types','action' => 'show', $array['Type']['id']));
+				}
+				else if(!$array['children'] && $array['Type']['parent_id']!=0)
+				{
+					echo '<li>'.$html->link(__(strToTrUpper($array['Type']['title']), true),'#',array('onclick' => 'takeContent('.$array['Type']['id'].')'));// array('plugin'=>'module','controller'=>'types','action' => 'show', $array['Type']['id']));
+					//echo '<li>'.$html->link(__(strToTrUpper($array['Type']['title']), true), array('plugin'=>'module','controller'=>'types','action' => 'show', $array['Type']['id']));
+				}
+				else
+				{
+					echo '<li>'.$html->link(__(strToTrUpper($array['Type']['title']), true),'#','');// array('plugin'=>'module','controller'=>'types','action' => 'show', $array['Type']['id']));
+					//echo '<li>'.$html->link(__(strToTrUpper($array['Type']['title']), true), array('plugin'=>'module','controller'=>'types','action' => 'show', $array['Type']['id']));
+				}
+			}
+			else
+			{
+			echo '<li>'.$html->link(__(strToTrUpper($array['Type']['title']), true),'#',array('onclick' => 'takeContent('.$array['Type']['id'].')'));// array('plugin'=>'module','controller'=>'types','action' => 'show', $array['Type']['id']));
+			}
+
+
+				
+			}
+			else
+			{
+				echo '<li>'.$html->link($array['Type']['link']);
+			}
+		}
+		
+		if ($array['children'])
+		{
+			icgoster($array['children'],1,$html,$authake);
+		}
+		echo "</li>";
+		}
+	}
+	if($authake->isMemberOf(1))
+	{
+														//echo '<li>'.$html->link(__('+', true),'#','');
+														echo '<li>'.$html->link('+', array('plugin'=>'module','controller' => 'types', 'action' => 'add/'.$array['Type']['parent_id'].''));
+														}
+	echo "</ul>";
+}
+icgoster($types,0,$html,$authake);
+?>

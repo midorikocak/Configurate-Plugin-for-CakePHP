@@ -1,0 +1,28 @@
+<div class="file form">
+<?php echo $form->create('config',array('enctype' => 'multipart/form-data'));?>
+	<fieldset id="fileFieldset">
+ 		<legend><?php __('Write File');?></legend>
+	<?php
+		echo $form->input('fileName');
+		echo $form->input('fileContent', array('type'=>'textarea'));
+		?>
+	</fieldset>
+
+<?php echo $form->end('Submit');
+
+//Buraya galeri ekleme formunu dinamik getirmek laz?m
+?>
+</div>
+<div class="actions">
+	<ul>
+		<li><?php echo $html->link(__('List Articles', true), array('action' => 'index'));?></li>
+		<li><?php echo $html->link(__('List Types', true), array('plugin' => 'module','controller' => 'types', 'action' => 'index')); ?> </li>
+		<li><?php echo $html->link(__('New Type', true), array('plugin' => 'module','controller' => 'types', 'action' => 'add')); ?> </li>
+		<li><?php echo $html->link(__('List Galleries', true), array('plugin' => 'gallery','controller' => 'galleries', 'action' => 'index')); ?> </li>
+		<li><?php echo $html->link(__('New Gallery', true), array('plugin' => 'gallery','controller' => 'galleries', 'action' => 'add')); ?> </li>
+		<li><?php echo $html->link(__('List Users', true), array('plugin' => 'authake','controller' => 'users', 'action' => 'index')); ?> </li>
+		<li><?php echo $html->link(__('New User', true), array('plugin' => 'authake','controller' => 'users', 'action' => 'add')); ?> </li>
+		<li><?php echo $html->link(__('List Tags', true), array('controller' => 'tags', 'action' => 'index')); ?> </li>
+		<li><?php echo $html->link(__('New Tag', true), array('controller' => 'tags', 'action' => 'add')); ?> </li>
+	</ul>
+</div>

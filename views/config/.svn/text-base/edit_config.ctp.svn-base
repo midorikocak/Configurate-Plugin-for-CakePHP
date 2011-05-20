@@ -1,0 +1,79 @@
+<div class="file form">
+<?php echo $form->create('config',array('enctype' => 'multipart/form-data'));?>
+	<fieldset id="fileFieldset">
+ 		<legend><?php __(ucfirst($fileName)." configuration");?></legend>
+	<?php
+	//var_dump($confArray);
+	$field ="";
+	$counter = 0;
+	foreach($confArray as $key => $value)
+	{
+	$counter++;
+	if(isset($value['text']))
+	{
+		$config = explode('(',$value['text'],2);
+		$configValue = explode(',',$config[1],2);
+		if(($field!=$config[0]) && ($field!=""))
+		{
+		echo "</fieldset>";
+		$field=$config[0];
+		//echo $field."<br/>";
+		echo "<fieldset id='$field'>";
+		echo "<legend>$field</legend>";
+		}
+		elseif ($field =="")
+		{
+		$field=$config[0];
+		//echo $field."<br/>";
+		echo "<fieldset id='$field'>";
+		echo "<legend>$field</legend>";
+		}
+		//var_dump($configValue[0]);
+		//var_dump(substr($configValue[1],0,-2));
+		echo $form->input(base64_encode($config[0]."(".$configValue[0]), array('label'=>$configValue[0],'value'=>substr($configValue[1],0,-2)));
+		//echo "<br/>\n";
+	}
+	elseif(isset($value['comment']))
+	{
+	echo $form->hidden("comment".$counter,array('value'=>$value['comment']));
+	}
+	}
+	echo $form->hidden("fileName",array('value'=>$fileName));
+	/*
+	$formArray = array();
+	$formArray['legend'] = $legend;
+	foreach($values as $value)
+	{
+	if($value['enabled']==0)
+	{
+	$disabled =true;
+	}
+	else
+	{
+	$disabled = false;
+	}
+	$formArray[$value['offset']."%DD%".$legend."%DD%".strlen($value['text'])."%DD%".str_replace('.','A$A$',$value['name'])] = array('label'=>ucwords($value['name']),'value'=>$value['value'],'disabled'=>$disabled);
+	}
+	echo $form->inputs($formArray);
+	}*/
+		?>
+	</fieldset>
+
+<?php echo $form->end('Submit');
+
+//Buraya galeri ekleme formunu dinamik getirmek laz?m
+?>
+</div>
+<div class="actions">
+	<ul>
+		<li><?php echo $html->link(__('List Articles', true), array('action' => 'index'));?></li>
+		<li><?php echo $html->link(__('List Types', true), array('plugin' => 'module','controller' => 'types', 'action' => 'index')); ?> </li>
+		<li><?php echo $html->link(__('New Type', true), array('plugin' => 'module','controller' => 'types', 'action' => 'add')); ?> </li>
+		<li><?php echo $html->link(__('List Galleries', true), array('plugin' => 'gallery','controller' => 'galleries', 'action' => 'index')); ?> </li>
+		<li><?php echo $html->link(__('New Gallery', true), array('plugin' => 'gallery','controller' => 'galleries', 'action' => 'add')); ?> </li>
+		<li><?php echo $html->link(__('List Users', true), array('plugin' => 'authake','controller' => 'users', 'action' => 'index')); ?> </li>
+		<li><?php echo $html->link(__('New User', true), array('plugin' => 'authake','controller' => 'users', 'action' => 'add')); ?> </li>
+		<li><?php echo $html->link(__('List Tags', true), array('controller' => 'tags', 'action' => 'index')); ?> </li>
+		<li><?php echo $html->link(__('New Tag', true), array('controller' => 'tags', 'action' => 'add')); ?> </li>
+	</ul>
+</div>

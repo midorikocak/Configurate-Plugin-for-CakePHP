@@ -1,0 +1,99 @@
+
+	<?php
+	$list = array();
+	$names = array();
+	$out = array();
+	$gsize = 0;
+	$asize = 0;
+	foreach ($type['Gallery'] as $gallery)
+		{
+		if($gallery['line'] == null)
+		{
+		$gallery['line'] = 0;
+		}
+		if(!isset($list[$gallery['line']])){
+		$list[$gallery['line']] = array();
+		}
+	$list[$gallery['line']][$gallery['title']] = $this->requestAction('/gallery/galleries/show/'.$gallery['id']);
+	$gsize++;
+	}
+	foreach ($type['Article'] as $article)
+		{
+				if($article['line'] == null)
+		{
+		$article['line'] = 0;
+		}
+		if(!isset($list[$article['line']])){
+		$list[$article['line']] = array();
+		}
+	$list[$article['line']][$article['title']] = $this->requestAction('/article/articles/show/'.$article['id']);
+	$asize++;
+	}
+	foreach ($type['Product'] as $product)
+		{
+		if($product['line'] == null)
+		{
+		$product['line'] = 0;
+		}
+		if(!isset($list[$product['line']])){
+		$list[$product['line']] = array();
+		}
+	$list[$product['line']][$product['title']] = $this->requestAction('/urunler/products/show/'.$product['id']);
+	}
+	ksort($list);
+	foreach ($list as$key => $values)
+	{
+	foreach ($values as $name => $thelist)
+	{
+	array_push($names,$name);
+	}
+	foreach ($values as $name => $thelist)
+	{
+	$out[$name] = $thelist;
+	}
+	}
+
+	?>
+	<div id="intabs">
+		<ul>
+<?php //var_dump($type['Gallery']); 
+$i=0;
+foreach ($names as $tabtitle)
+{
+$i++;
+echo '<li><a href="#tab_'.$i.'">'.$tabtitle.'</a></li>';
+}
+?>
+	</ul>
+<?php //var_dump($type['Gallery']); 
+$i = 0;
+foreach ($out as $namex => $tabcontent)
+{
+$i++;
+echo '<div id="tab_'.$i.'">'.$tabcontent.'</div>';
+}
+?>
+</div>
+
+<div class="types view">
+	
+
+<!-- <h3><?php //echo $type['Type']['title']; ?></h3> -->
+<div class='description'>
+<?php echo $type['Type']['description']; ?>
+<hr class='space' />
+</div>
+	<?php echo $this->requestAction('/module/types/actions/'.$type['Type']['id']); ?>
+</div>
+<?php
+	
+	/*if($type['Type']['parent_id'] != 0)
+	{
+	echo $html->link(__('Back', true), array('plugin'=>'module','controller'=>'types','action' => 'show', $type['Type']['parent_id']));
+	}
+	else
+	{
+	echo $html->link(__('Back', true), array('plugin'=>'module','controller'=>'types','action' => 'show', 1));
+	} //BU BIR USTTEKI TYPE'A GERI DONMEYE YARIYOR
+	*/
+?>

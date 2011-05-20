@@ -1,0 +1,156 @@
+
+
+<div class="types view">
+
+
+
+<!-- <h3><?php //echo $type['Type']['title']; ?></h3> -->
+<div class='description'>
+<?php 
+	if($authake->isMemberOf(1))
+	{
+	echo $html->link(__('Edit Type', true), array('plugin'=>'module','controller' => 'types', 'action' => 'edit/'.$type['Type']['id'].''));
+			echo ' | ';
+		echo $html->link(__('Hide Type', true), array('plugin'=>'module','controller' => 'types', 'action' => 'hide/'.$type['Type']['id'].''));
+			echo ' | ';
+						echo $html->link(__('Add Type', true), array('plugin'=>'module','controller' => 'types', 'action' => 'add/'.$type['Type']['id'].''));
+			echo ' | ';
+									echo $html->link(__('Move Left', true), array('plugin'=>'module','controller' => 'types', 'action' => 'moveleft/'.$type['Type']['id'].''));
+			echo ' | ';
+									echo $html->link(__('Move Right', true), array('plugin'=>'module','controller' => 'types', 'action' => 'moveright/'.$type['Type']['id'].''));
+			echo ' | ';
+					echo $html->link(__('Add Gallery', true), array('plugin'=>'gallery','controller' => 'galleries', 'action' => 'insert/'.$type['Type']['id'].''));
+			echo ' | ';
+								echo $html->link(__('Connect Gallery', true), array('plugin'=>'gallery','controller' => 'galleries', 'action' => 'connect/'.$type['Type']['id'].''));
+										echo ' | ';
+				echo $html->link(__('Add Article', true), array('plugin'=>'article','controller' => 'articles', 'action' => 'add/'.$type['Type']['id'].''));
+													echo ' | ';
+								echo $html->link(__('Logout', true), array('plugin'=>'authake','controller' => 'user', 'action' => 'logout'));
+
+			echo '<br/><br/>';
+			}
+?>
+	<?php 
+	if($type['Type']['parent_id']!=0)
+	{
+	echo $this->requestAction('/module/types/actions/'.$type['Type']['id']);
+			//echo $html->link(__('Delete Article', true), array('plugin'=>'article','controller' => 'articles', 'action' => 'delete/'.$article['Article']['id'].''));
+}
+?>
+<?php echo $type['Type']['description']; ?>
+<script type="text/javascript">
+			if ($('.actions').children().size() != 0 )
+{
+  $('#main').attr('class', 'span-15 colborder-nopad');
+}
+			if ($('.actions').children().size() == 0 )
+{
+  $('#main').attr('class', 'span-23 colborder-nopad last');
+}
+</script>
+</div>
+</div>
+
+	<?php
+	$list = array();
+	$names = array();
+	$out = array();
+	$gsize = 0;
+	$asize = 0;
+	foreach ($type['Gallery'] as $gallery)
+		{
+		if($gallery['line'] == null)
+		{
+		$gallery['line'] = 0;
+		}
+		if(!isset($list[$gallery['line']])){
+		$list[$gallery['line']] = array();
+		}
+	$list[$gallery['line']][$gallery['title']] = 	$this->requestAction('/gallery/galleries/show/'.$gallery['id'].'/requester:'.'Type'.$type['Type']['id']);
+
+	//$this->requestAction(array('plugin'=>'Gallery','controller'=>'galleries','action'=>'show','pass'=> array('id'=>$gallery['id'],'requester'=>'Type'.$type['Type']['id']))); //
+	//$this->requestAction('/gallery/galleries/show/'.$gallery['id']);
+	
+	$gsize++;
+	}
+	foreach ($type['Article'] as $article)
+		{
+				if($article['line'] == null)
+		{
+		$article['line'] = 0;
+		}
+		if(!isset($list[$article['line']])){
+		$list[$article['line']] = array();
+		}
+	$list[$article['line']][$article['title']] = $this->requestAction('/article/articles/show/'.$article['id']);
+	$asize++;
+	}
+	foreach ($type['Product'] as $product)
+		{
+		if($product['line'] == null)
+		{
+		$product['line'] = 0;
+		}
+		if(!isset($list[$product['line']])){
+		$list[$product['line']] = array();
+		}
+	$list[$product['line']][$product['title']] = $this->requestAction('/urunler/products/show/'.$product['id']);
+	}
+	ksort($list);
+	foreach ($list as$key => $values)
+	{
+	foreach ($values as $name => $thelist)
+	{
+	array_push($names,$name);
+	}
+	foreach ($values as $name => $thelist)
+	{
+	$out[$name] = $thelist;
+	}
+	}
+
+	?>
+	<?php 
+	if(sizeof($out)>1){
+	?>
+	<div id="intabs">
+		<ul>
+<?php //var_dump($type['Gallery']); 
+$i=0;
+foreach ($names as $tabtitle)
+{
+$i++;
+echo '<li><a href="#tab_'.$i.'">'.$tabtitle.'</a></li>';
+}
+?>
+	</ul>
+<?php //var_dump($type['Gallery']); 
+$i = 0;
+foreach ($out as $namex => $tabcontent)
+{
+$i++;
+echo '<div id="tab_'.$i.'">'.$tabcontent.'</div>';
+}
+?>
+</div>
+<?php }
+else
+{
+foreach ($out as $namex => $tabcontent)
+{
+echo $tabcontent;
+}
+}
+?>
+<?php
+
+	/*if($type['Type']['parent_id'] != 0)
+	{
+	echo $html->link(__('Back', true), array('plugin'=>'module','controller'=>'types','action' => 'show', $type['Type']['parent_id']));
+	}
+	else
+	{
+	echo $html->link(__('Back', true), array('plugin'=>'module','controller'=>'types','action' => 'show', 1));
+	} //BU BIR USTTEKI TYPE'A GERI DONMEYE YARIYOR
+	*/
+?>

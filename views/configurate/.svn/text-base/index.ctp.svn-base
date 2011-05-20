@@ -1,0 +1,13 @@
+
+<?php
+Configure::load('core');
+  // Configure::write(  'Sirket',array('adi'=>'Puzzle Tasar?m','slogan'=>'Web tasar?mda cozum ortag?n?z') );
+//var_dump(Configure::read('Sirket'));
+//Configure::store('Model', 'class_paths', array('Users' => array('path' => 'users', 'plugin' => true)));
+$file = CONFIGS.'core.php';
+if(is_writable($file))
+{
+$config = file_get_contents($file);
+echo highlight_string($config);
+}
+?>
