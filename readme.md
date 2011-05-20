@@ -2,6 +2,10 @@
 
 Configurate plugin is designed for you to easily setup the configuration of CakePHP configuration quickly. Most essential tasks like editing of Core configuration, backup of Database and Configuration files and folders, data backup from database are implemented. There is too much future tasks to implement, like file editor and file backup. You are welcomed to make any change and advises.
 
+## Usage ##
+
+Copy to your app/plugins folder. That's all.
+
 ## Author ##
 
 May 2011, Mutlu Tevfik Kocak. You are free to ask any questions about the plugin and CakePHP bakery. For any other information about me, please check out my website: http://www.mtkocak.net
